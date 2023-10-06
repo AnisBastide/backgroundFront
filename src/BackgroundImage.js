@@ -4,6 +4,7 @@ import './BackgroundImage.css';
 function BackgroundImage() {
     const [backgrounds, setBackgrounds] = useState([]);
     const [newBackground, setNewBackground] = useState({ link: '', width: 0, height: 0 });
+    const [newTreasure, setNewTreasure] = useState({ file: null, score: 0 });
     const [selectedBackground, setSelectedBackground] = useState(null);
 
     useEffect(() => {
@@ -40,13 +41,20 @@ function BackgroundImage() {
                 ))}
             </ul>
 
-            {/* ADD BACKGROUND */}
+            {/* ADD TREASURE */}
             <form onSubmit={addTreasure}>
                 <input
-                    type="file" // Type "file" pour la sélection de fichier
-                    accept="image/*" // Pour limiter la sélection aux fichiers image
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setNewTreasure({ ...newTreasure, file: e.target.files[0] })}
                 />
-                <button type="submit">Ajouter</button>
+                <input
+                    type="number"
+                    placeholder="Score du trésor"
+                    value={newTreasure.score}
+                    onChange={(e) => setNewTreasure({ ...newTreasure, score: e.target.value })}
+                />
+                <button type="submit">Ajouter un treasure</button>
             </form>
 
             {/* ADD BACKGROUND */}
