@@ -1,19 +1,64 @@
 import React, { useState, useEffect } from 'react';
 import './BackgroundImage.css';
+import axios from 'axios';
 
 function BackgroundImage() {
     const [backgrounds, setBackgrounds] = useState([]);
     const [newBackground, setNewBackground] = useState({ link: '', width: 0, height: 0 });
-    const [newTreasure, setNewTreasure] = useState({ file: null, score: 0 });
+    const [newTreasure, setNewTreasure] = useState({ file: '', score: 0 });
     const [selectedBackground, setSelectedBackground] = useState(null);
+    const backendUrl = process.env.BACKEND_URL;
 
     useEffect(() => {
+        axios.get('http://localhost:80/background')
+            .then((response) => {
+                setBackgrounds(response.data);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }, []);
 
-    const addBackground = () => {
+    const addBackground = async () => {
+        try {
+            const formData = new FormData();
+            formData.append('link', newBackground.link);
+            formData.append('width', newBackground.width);
+            formData.append('height', newBackground.height);
+
+            const response = await axios.post('http://localhost:80/background', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            setBackgrounds([...backgrounds, response.data]);
+            setNewBackground({ link: '', width: 0, height: 0 });
+
+        } catch (error) {
+            console.error(error);
+        }
     };
 
-    const addTreasure = () => {
+    const addTreasure = async (e) => {
+        e.preventDefault();
+        try {
+            const formData = new FormData();
+            formData.append('image', newTreasure.file.name);
+            formData.append('score', newTreasure.score);
+
+            const response = await axios.post('http://localhost:80/treasure', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            console.log(response);
+
+            setNewTreasure({ file: '', score: 0 });
+
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const handleFileChange = (e) => {
@@ -21,7 +66,15 @@ function BackgroundImage() {
         setNewBackground({ ...newBackground, file });
     };
 
-    const deleteBackground = (backgroundId) => {
+    const deleteBackground = async (backgroundId) => {
+        try {
+            await axios.delete(`${backendUrl}/background/${backgroundId}`);
+
+            const updatedBackgrounds = backgrounds.filter((background) => background.id !== backgroundId);
+            setBackgrounds(updatedBackgrounds);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const selectBackground = (background) => {
@@ -36,7 +89,6 @@ function BackgroundImage() {
                     <li key={background.id}>
                         <img src={background.link} alt={`Background ${background.id}`} />
                         <button onClick={() => deleteBackground(background.id)}>Supprimer</button>
-                        <button onClick={() => selectBackground(background)}>Modifier</button>
                     </li>
                 ))}
             </ul>
