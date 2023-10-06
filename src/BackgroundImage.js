@@ -12,6 +12,9 @@ function BackgroundImage() {
     const addBackground = () => {
     };
 
+    const addTreasure = () => {
+    };
+
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         setNewBackground({ ...newBackground, file });
@@ -36,6 +39,15 @@ function BackgroundImage() {
                     </li>
                 ))}
             </ul>
+
+            {/* ADD BACKGROUND */}
+            <form onSubmit={addTreasure}>
+                <input
+                    type="file" // Type "file" pour la sélection de fichier
+                    accept="image/*" // Pour limiter la sélection aux fichiers image
+                />
+                <button type="submit">Ajouter</button>
+            </form>
 
             {/* ADD BACKGROUND */}
             <form onSubmit={addBackground}>
