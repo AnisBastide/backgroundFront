@@ -56,7 +56,7 @@ function BackgroundImage() {
                     accept="image/*" // Pour limiter la sélection aux fichiers image
                     onChange={handleFileChange} // Gérer le changement de fichier
                 />
-                <button type="submit">Ajouter</button>
+                <button type="submit">Ajouter un background</button>
             </form>
         </div>
     );
