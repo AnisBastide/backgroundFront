@@ -8,9 +8,11 @@ function BackgroundImage() {
     const [newTreasure, setNewTreasure] = useState({ file: '', score: 0 });
     const [selectedBackground, setSelectedBackground] = useState(null);
     const backendUrl = process.env.BACKEND_URL;
+    console.log(backendUrl);
+    console.log("here");
 
     useEffect(() => {
-        axios.get('http://localhost:80/background')
+        axios.get(`${backendUrl}/background`)
             .then((response) => {
                 setBackgrounds(response.data);
             })
@@ -21,12 +23,14 @@ function BackgroundImage() {
 
     const addBackground = async () => {
         try {
+            console.log(backendUrl);
+            console.log("here");
             const formData = new FormData();
             formData.append('link', newBackground.link);
             formData.append('width', newBackground.width);
             formData.append('height', newBackground.height);
 
-            const response = await axios.post('http://localhost:80/background', formData, {
+            const response = await axios.post(`${backendUrl}/background`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -43,11 +47,13 @@ function BackgroundImage() {
     const addTreasure = async (e) => {
         e.preventDefault();
         try {
+            console.log(backendUrl);
+            console.log("here");
             const formData = new FormData();
             formData.append('image', newTreasure.file.name);
             formData.append('score', newTreasure.score);
 
-            const response = await axios.post('http://localhost:80/treasure', formData, {
+            const response = await axios.post(`${backendUrl}/treasure`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
