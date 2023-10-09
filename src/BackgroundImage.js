@@ -33,7 +33,8 @@ function BackgroundImage() {
         }
     };
 
-    const addBackground = async () => {
+    const addBackground = async (e) => {
+        e.preventDefault();
         try {
             console.log("here");
             const requestData = {
